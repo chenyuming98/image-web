@@ -1,0 +1,45 @@
+html,body,#app,.el-container,.el-card{
+  /*设置内部填充为0，几个布局元素之间没有间距*/
+  padding: 0px;
+  /*外部间距也是如此设置*/
+  margin: 0px;
+  height: 100%;
+}
+/*
+* 第一格卡片和上方面包屑的字体大小 和距离顶部距离
+*/
+.el-breadcrumb{
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+/*
+* 卡片下方和上方的距离
+*/
+.tableCard{
+  margin: 10px 0 0;
+}
+
+/*
+* 侧边栏菜单一级和二级之间有个碍事的占用空间
+*/
+.el-menu-item-group__title{
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+/*
+* 去除抽屉标题的蓝色框线
+*/
+:focus{
+  outline:0;
+}
+
+/*
+* 所有表格居中
+*/
+.el-table .cell {
+  text-align: center;
+}
+.el-table th > .cell {
+  text-align: center;
+}
