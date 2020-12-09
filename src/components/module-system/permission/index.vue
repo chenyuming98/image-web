@@ -7,8 +7,7 @@
               <el-row style=" padding-bottom: 7px;">
                 <el-button type="primary" size="small" @click="addChildNode">添加子级菜单</el-button>
                 <el-button type="primary" size="small"  @click="addSameNode">添加同级菜单</el-button>
-
-                  <el-dropdown @command="handleCommand" style="  margin-left: 10px;   border-left-width: 1px; ">
+                <el-dropdown @command="handleCommand" style="  margin-left: 10px;   border-left-width: 1px; ">
                     <el-button   size="small">
                       更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
@@ -43,7 +42,7 @@
               <span :class="[data.id ? 'slot-t-node--label' : '']">{{node.label}}</span>
             </span>
             <!--          <i :class="data.icon"></i>-->
-          <span v-show="!node.isEdit">
+              <span v-show="!node.isEdit">
 
 <!--            <span v-show="!data.children || data.children.length == 0">-->
             <!--              <i class='' style='margin-right:10px'></i>-->
@@ -58,7 +57,7 @@
             <!--                      @blur.stop="NodeBlur(node, data)"-->
             <!--                      @keyup.enter.native="NodeBlur(node, data)"></el-input>-->
             <!--          </span>-->
-        </span>
+               </span>
               </el-tree>
             </div>
 
