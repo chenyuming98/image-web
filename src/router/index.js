@@ -10,8 +10,8 @@ import dictionaryPage from '../components/module-system/dictionary/index.vue'
 import companyPage from '../components/module-company/company/index.vue'
 import employeePage from '../components/module-company/employee/index.vue'
 import sysLogPage from '../components/module-system/syslog/index.vue'
-import imagePage from '../components/model-file/index.vue'
-
+import imageClassPage from '../components/model-imageclass/index.vue'
+import filePage from '../components/model-file/index.vue'
 Vue.use(VueRouter);
 
 const routes = [
@@ -28,7 +28,8 @@ const routes = [
       { path: '/dictionarypage',component: dictionaryPage},
       { path: '/syslogpage',component: sysLogPage},
       { path: '/employee',component: employeePage},
-      { path: '/imagepage',component: imagePage},
+      { path: '/filepage',component: filePage},
+      { path: '/imageclasspage',component: imageClassPage},
     ]},
 ];
 

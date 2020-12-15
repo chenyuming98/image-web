@@ -16,6 +16,17 @@
               :data = uploadData
               :auto-upload="true">
               <el-button type="primary" icon="el-icon-download" size="small" @click="">导入</el-button>
+              <el-dropdown @command="handleCommand" style="  margin-left: 10px;   border-left-width: 1px; ">
+                <el-button   size="small">
+                  更多菜单<i class="el-icon-arrow-down el-icon--right"  @click.stop></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown" style="  margin-left: 18px;   border-left-width: 2px; ">
+                  <el-dropdown-item command="changCheckStatus">复选框</el-dropdown-item>
+                  <el-dropdown-item command="notChooseAll">全部取消</el-dropdown-item>
+                  <el-dropdown-item command="expandAll">展开所有</el-dropdown-item>
+                  <el-dropdown-item command="trainFile">训练svm</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
            </el-upload>
           </el-row>
 
@@ -30,7 +41,7 @@
           </template>
           <!-- 权限树结构  自定义参数配置 1. node-key指定自定义的树结构ID的主键  2.:props="defaultProps 配置其他数据对象绑定 -->
           <el-tree style="margin-top: 10px"   :data="setTree"   :props="defaultProps"  node-key="fileId"  ref="treeObject"
-                   :show-checkbox="useCheck"   :check-strictly="true" @node-contextmenu='rightClick'
+                   :show-checkbox="useCheck"    @node-contextmenu='rightClick'
                    @node-click="nodeClick"  >
                <span class="slot-t-node" slot-scope="{ node, data }">
                <span >
@@ -107,7 +118,7 @@
 </template>
 <!--主页面板-->
 <script>
-  import {fileList,imageFileList,batchRemove} from "@/api/base/file"
+  import {fileList,imageFileList,batchRemove,trainSvmFile} from "@/api/base/file"
   const myToken =  localStorage.getItem('accessToken');
   import {showLoading,hideLoading} from '@/utils/loadingUtils';
   const  multipleSelectionList =  new Set([]);
@@ -240,6 +251,7 @@
           let code = res['code'];
           if (code===200){
             this.$message.success('上传成功!');
+            this.doQueryFile();
           }else {
             this.$message.error(res['msg']);
           }
@@ -328,7 +340,59 @@
               this.$message({message: "请先开启复选框！",type:  "error"});
             }
           }
+          else if (command==="trainFile"){
+            if (this.useCheck){
+              this.trainFile();
+            }else {
+              this.$message({message: "请先开启复选框！",type:  "error"});
+            }
+          }
         },
+
+        /**
+         * 训练SVM模型
+         */
+        trainFile(rowData){
+          let list = this.$refs.treeObject.getCheckedNodes();
+          if (list.length===0){
+            this.$message.warning("请勾选操作对象！");
+            return false;
+          }
+          let deleteNames,deleteIds;
+          let submitData = new FormData();
+          for (let i = 0; i < list.length; i++) {
+            if (list[i].url=="train" ||list[i].url=="match" ){
+              continue
+            }
+            if (i===0){
+              deleteNames = list[i].url.replace(/\\/g,'//');
+              deleteIds = list[i].url.replace(/\\/g,'//');
+            }else {
+              deleteNames += ","+list[i].url.replace(/\\/g,'//');
+              deleteIds +=  ","+list[i].url.replace(/\\/g,'//');
+            }
+          }
+          this.$confirm(  `请确认选中文件夹[${ deleteNames }]`, {
+            type: 'warning'
+          }  ).then(() => {
+            submitData.append("url",deleteIds);
+            showLoading();
+            trainSvmFile(submitData)
+              .then(res => {
+                let resp = res.data;
+                if (resp.code === 200) {
+                  hideLoading();
+                  this.$message.success('训练成功!');
+                  // this.doQuery();
+                } else {
+                  this.$message.error(resp.msg);
+                  hideLoading();
+                }
+              })
+          })
+
+        },
+
         /**
          * 表格行删除员工
          */
@@ -446,7 +510,8 @@
   .el-select{
     width: 300px;
   }
-
+  .el-dropdown{
+  }
   /*************************标签鼠标右击页面样式******************************/
   .el-menu-vertical{
     border: 3px solid rgb(84, 92, 100);
