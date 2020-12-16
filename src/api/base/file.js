@@ -7,3 +7,4 @@ export const trainSvmFile = data => createAPI(`/image/trainSvm`, 'post', data);
 export const svmList = data => createAPI('/image/svmList', 'get', data);
 export const testSvmFile = data => createAPI(`/image/svmTest`, 'post', data);
 export const probabilityList = data => createAPI('/image/probabilityList', 'get', data);
+export const deletesProbability = data => createAPI(`/image/deletesProbability`, 'post', data);

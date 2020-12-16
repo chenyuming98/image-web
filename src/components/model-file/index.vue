@@ -14,25 +14,26 @@
               :before-upload="beforeAvatarUpload"
               :headers="token"
               :data = uploadData
+              :show-file-list = false
               :auto-upload="true">
               <el-button type="primary" icon="el-icon-download" size="small" @click="">导入</el-button>
-              <el-dropdown @command="handleCommand" style="  margin-left: 10px;   border-left-width: 1px; ">
-                <el-button   size="small">
-                  更多菜单<i class="el-icon-arrow-down el-icon--right"  @click.stop></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown" style="  margin-left: 18px;   border-left-width: 2px; ">
-                  <el-dropdown-item command="changCheckStatus">复选框</el-dropdown-item>
-                  <el-dropdown-item command="notChooseAll">全部取消</el-dropdown-item>
-                  <el-dropdown-item command="expandAll">展开所有</el-dropdown-item>
-                  <el-dropdown-item command="trainFile">训练svm</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
            </el-upload>
+            <el-dropdown @command="handleCommand" style="  margin-left: 10px;   border-left-width: 1px; ">
+              <el-button   size="small">
+                更多菜单<i class="el-icon-arrow-down el-icon--right"  @click.stop></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown" style="  margin-left: 18px;   border-left-width: 2px; ">
+                <el-dropdown-item command="changCheckStatus">复选框</el-dropdown-item>
+                <el-dropdown-item command="notChooseAll">全部取消</el-dropdown-item>
+                <el-dropdown-item command="expandAll">展开所有</el-dropdown-item>
+                <el-dropdown-item command="trainFile">训练svm</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </el-row>
 
           <template v-if="this.currentNodeData">
             <el-tag  style=" width: 250px; ">
-              当前操作对象： {{ this.currentNodeData.title}}  <i class="el-icon-info" style="margin-left: 30px;" @click="cancelChooseNode">  取消</i>
+              当前操作文件夹： {{ this.currentNodeData.title}}  <i class="el-icon-info" style="margin-left: 30px;" @click="cancelChooseNode">  取消</i>
             </el-tag>
           </template>
 
@@ -53,7 +54,7 @@
           <div v-show="menuVisible" >
             <el-menu  id = "rightClickMenu"  class="el-menu-vertical"   @select="handleRightSelect"   active-text-color="#fff"  text-color="#fff" >
               <el-menu-item index="1" class="menuItem">
-                <span slot="title">删除当前菜单</span>
+                <span slot="title">删除当前文件夹</span>
               </el-menu-item>
             </el-menu>
           </div>
@@ -75,7 +76,7 @@
           <el-table :data="dataList"  style="width: 100%" border  ref="multipleTable" >
             <el-table-column type="selection" width="40" prop="userId"> </el-table-column>
             <el-table-column  prop="fileName"  label="文件名" > </el-table-column>
-            <el-table-column prop="image" label="图片" min-width="30%" >
+            <el-table-column prop="image" label="图片" min-width="100px" >
               <!-- 图片的显示 -->
               <template   slot-scope="scope">
                 <!--            <img :src="scope.row.url"  min-width="70" height="70" />-->
@@ -537,4 +538,9 @@
   .iconMenuTool{
     width: 300px;
   }
+  /*************************文件上传******************************/
+  .inline-block {
+    display: inline-block;
+  }
+
 </style>

@@ -1,13 +1,15 @@
 <template>
   <el-container style="border: 1px solid #eee">
     <el-row style="width: 100%">
-      <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3" class="aside">
+
+
+
+      <el-col :offset="1" :xs="8" :sm="11" :md="14" :lg="16" :xl="18">
         <el-card class="box-card">
-          <el-row style=" padding-bottom: 4px;">
-            <el-button type="primary" icon="fa fa-folder-open" size="small" @click="openTree">      测试集测试</el-button>
-          </el-row>
-          <el-row style=" padding-bottom: 4px;">
-<!--            :on-success="handleAvatarSuccess"-->
+          <!--表头菜单-->
+          <div id="handButton" >
+            <el-button type="primary" icon="fa fa-folder-open" size="small" @click="openSvmDialog('more')"> 测试集测试</el-button>
+            <el-button type="primary" icon="fa fa-image" size="small" @click="openSvmDialog('one')"> 上传一张图片</el-button>
             <el-upload
               class="upload-demo inline-block margin-right-10"
               ref="upload"
@@ -19,51 +21,32 @@
               :headers="token"
               :data = uploadData
               :auto-upload="true">
-              <el-button type="primary" icon="fa fa-image" size="small" @click="">  上传一张图片</el-button>
+              <el-button id="uploadOneImage" type="primary" icon="fa fa-image" size="small" @click="" v-show="false">  上传一张图片</el-button>
             </el-upload>
-          </el-row>
-          <el-row >
-            <el-form :model="svmFormBase" status-icon   ref="refForm" >
-             <el-form-item label="" prop="" >
-              <el-select v-model="svmFormBase.svmVersionId"  placeholder="请选择SVM版本" size="small" @change="getSvmSelectData(data)">
-                <el-option
-                  v-for="item in smvData"
-                  :key="item.svmId"
-                  :label="item.name"
-                  :value="item.svmId">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            </el-form>
-          </el-row>
-        </el-card>
-      </el-col>
-
-
-      <el-col :offset="1" :xs="8" :sm="11" :md="13" :lg="15" :xl="16">
-        <el-card class="box-card">
-          <!--表头菜单-->
-          <div class="tableHeaderToolButtonGroup">
-                    <el-button icon="el-icon-delete" size="mini"  @click="" >清空列表</el-button>
           </div>
+          <el-row style="padding-top: 10px;">
+            <el-button icon="el-icon-delete" size="mini"  @click="batchDelete" ></el-button>
+          </el-row>
         </el-card>
+
         <el-card class="tableCard" >
           <el-table :data="dataList"  style="width: 100%" border  ref="multipleTable" >
             <el-table-column type="selection" width="40" prop="imageId"> </el-table-column>
             <el-table-column  prop="fileName"  label="文件名" > </el-table-column>
-            <el-table-column prop="image" label="图片" min-width="30%" >
+            <el-table-column prop="image" label="图片" min-width="100px" >
               <!-- 图片的显示 -->
-<!--              <template   slot-scope="scope">-->
-<!--                &lt;!&ndash;            <img :src="scope.row.url"  min-width="70" height="70" />&ndash;&gt;-->
-<!--                <div class="demo-image__preview">-->
-<!--                  <el-image-->
-<!--                    style="width: 100px; height: 75px"-->
-<!--                    :src="scope.row.url"-->
-<!--                    :preview-src-list=[scope.row.url]>></el-image>-->
-<!--                </div>-->
-<!--              </template>-->
+              <template   slot-scope="scope">
+                <!--            <img :src="scope.row.url"  min-width="70" height="70" />-->
+                <div class="demo-image__preview">
+                  <el-image
+                    style="width: 100px; height: 75px"
+                    :src="scope.row.url"
+                    :preview-src-list=[scope.row.url]>></el-image>
+                </div>
+              </template>
             </el-table-column>
-            <el-table-column  prop="score"  label="得分" > </el-table-column>
+            <el-table-column  prop="label"  label="标签"   :formatter="labelFormatter"></el-table-column>
+            <el-table-column  prop="svmInfo"  label="标签信息" > </el-table-column>
             <el-table-column  prop="probability"  label="概率" > </el-table-column>
             <el-table-column  prop="classification"  label="分类预测" > </el-table-column>
           </el-table>
@@ -84,6 +67,32 @@
         </el-card>
       </el-col>
     </el-row>
+
+
+    <el-dialog :title="svmTitleDialog"   :visible.sync="SvmDialog" :before-close="svmCancel" :close-on-click-modal="false" :width="'20%'">
+      <!-- :model绑定表单对象  status-icon控制每一行表单校验通过后图标显示正确和错误   :rules绑定校验规则  autocomplete="off" 关闭表单默认以及功能-->
+      <el-form :model="svmFormBase" status-icon   ref="svmRefForm" >
+        <el-form-item label="svm文件" prop="file" >
+          <el-select v-model="svmFormBase.svmVersionId"  placeholder="请选择SVM版本" size="small" @change="getSvmSelectData">
+            <el-option
+              v-for="item in smvData"
+              :key="item.svmId"
+              :label="item.name"
+              :value="item">
+            </el-option>
+          </el-select>
+
+          <el-form-item label="svm信息" prop="svmInfo" >
+            <el-input  type="textarea" readonly="true" v-model="svmFormBase.svmInfo" autocomplete="off"   :rows="5" ></el-input>
+          </el-form-item>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="svmCancel">取 消</el-button>
+        <el-button type="primary" @click="chooseSvm">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog :title="titleDialog"   :visible.sync="TreeDialog" :before-close="cancel" :close-on-click-modal="false" :width="'40%'">
       <!-- :model绑定表单对象  status-icon控制每一行表单校验通过后图标显示正确和错误   :rules绑定校验规则  autocomplete="off" 关闭表单默认以及功能-->
       <el-form :model="FileFormBase" status-icon  ref="refForm" label-width="120px">
@@ -110,14 +119,16 @@
 </template>
 <!--主页面板-->
 <script>
-  import {fileList,testSvmFile,probabilityList,svmList} from "@/api/base/file"
+  import {fileList,testSvmFile,probabilityList,svmList,deletesProbability} from "@/api/base/file"
   import {showLoading,hideLoading} from '@/utils/loadingUtils';
+  import $ from 'jquery'
   const myToken =  localStorage.getItem('accessToken');
 
     export default {
 
       data() {
         return {
+          digMsg:'',
           value: '',
           token: {'Authorization':  myToken},
           smvData: [],
@@ -127,6 +138,7 @@
           FileFormBase:{},
           svmFormBase:{
             svmVersionId:"",
+            svmInfo:"",
           },
           //树节点绑定
           setTree: [],  //全部后台树结构数据绑定对象
@@ -136,7 +148,9 @@
           },
           useCheck:false,
           TreeDialog: false,
-          titleDialog:"选择",
+          SvmDialog:false,
+          svmTitleDialog: "SVM版本选择",
+          titleDialog:"测试集测试",
           //定义表单初始化参数
           checkInfo: {
             svmVersionId:"",
@@ -158,22 +172,38 @@
          *  处理文件上传前处理
          */
         beforeAvatarUpload(res, file){
-          let path = this.uploadData.savePath;
-          if (path==null || path.length<=0){
-            this.$message.error("请选择一张图片");
-            return false
+        },
+
+        openSvmDialog(msg){
+          this.SvmDialog= true;
+          this.digMsg = msg;
+        },
+
+        chooseSvm(){
+          this.SvmDialog= false;
+          if (this.digMsg==="more"){
+            this.TreeDialog = true;
+            this.doQueryFile();
+          }
+          else if (this.digMsg==="one"){
+            $("#uploadOneImage").click()
           }
         },
-        openTree(){
-          this.TreeDialog = true;
-          this.doQueryFile();
-        },
+
+
         /**
          * 表单取消对话框事件
          */
         cancel() {
           this.TreeDialog = false;
           this.$refs['refForm'].resetFields();
+        },
+
+        svmCancel(){
+          this.SvmDialog = false;
+          this.svmFormBase.svmVersionId = "";
+          this.$refs['svmRefForm'].resetFields();
+          this.digMsg = '';
         },
         /*
         * 查询SVM版本列表
@@ -183,7 +213,6 @@
             .then(res => {
               let resp = res.data;
               this.smvData = resp.data;
-              console.log(resp.data)
             })
         },
 
@@ -210,8 +239,15 @@
             })
         },
 
+        /*
+        * 表单格式化取整
+        */
+        labelFormatter(row, column){
+          return Math.round(row.label);
+        },
+
         getSvmSelectData(data){
-          console.log(data)
+          this.svmFormBase.svmInfo = data.info;
         },
 
         submitTestData(){
@@ -254,12 +290,58 @@
                   this.doQueryProbabilityList();
                   this.TreeDialog = false;
                 } else {
-                  this.$message.error(resp.msg);
                   hideLoading();
+                  if (resp.msg){
+                    this.$message.error(resp.msg);
+                  }
                 }
               })
-          })
+          });
+          this.digMsg = '';
         },
+
+        /**
+         *  表头批量删除
+         */
+        batchDelete() {
+          let list = this.$refs.multipleTable.selection;
+          if (list.length===0){
+            this.$message.warning("请勾选操作对象！");
+            return false;
+          }
+          let deleteNames,deleteIds;
+          let submitData = new FormData();
+          for (let i = 0; i < list.length; i++) {
+            if (i===0){
+              deleteNames = list[i].fileName;
+              deleteIds = list[i].id;
+            }else {
+              deleteNames += ","+list[i].fileName;
+              deleteIds +=  ","+list[i].id;
+            }
+          }
+          this.$confirm(  `本次操作将删除[ ${ deleteNames } ]记录信息,删除后将不可恢复，您确认删除吗？`, {
+            type: 'warning'
+          }  ).then(() => {
+            submitData.append("ids",deleteIds);
+            showLoading();
+            deletesProbability(submitData)
+              .then(res => {
+                let resp = res.data;
+                if (resp.code === 200) {
+                  this.$message.success('删除成功!');
+                  this.doQueryProbabilityList();
+                  hideLoading();
+                } else {
+                  hideLoading();
+                  this.$message.error(resp.msg);
+                }
+              })
+          }).catch(() => {
+          });
+
+        },
+
         /***表格分页*****/
         /*
         *改变每页显示数
@@ -290,9 +372,7 @@
   .el-input{
     width: 300px;
   }
-  .el-select{
-    width: 150px;
-  }
+
 
   /*************************标签鼠标右击页面样式******************************/
   .el-menu-vertical{
@@ -318,5 +398,10 @@
   }
   .iconMenuTool{
     width: 300px;
+  }
+
+  /*************************文件上传******************************/
+  .inline-block {
+    display: inline-block;
   }
 </style>
