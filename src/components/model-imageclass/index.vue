@@ -4,7 +4,7 @@
 
 
 
-      <el-col :offset="1" :xs="8" :sm="11" :md="14" :lg="16" :xl="18">
+      <el-col   :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <el-card class="box-card">
           <!--表头菜单-->
           <div id="handButton" >
@@ -260,18 +260,19 @@
             this.$message.warning("请选择SVM版本！");
             return false;
           }
-          let deleteNames,deleteIds;
+          let deleteNames='',deleteIds='';
           for (let i = 0; i < list.length; i++) {
             if (list[i].url=="train" ||list[i].url=="match" ){
               continue
             }
-            if (i===0){
-              deleteNames = list[i].url.replace(/\\/g,'//');
-              deleteIds = list[i].url.replace(/\\/g,'//');
-            }else {
-              deleteNames += ","+list[i].url.replace(/\\/g,'//');
-              deleteIds +=  ","+list[i].url.replace(/\\/g,'//');
-            }
+            deleteNames += ","+list[i].url.replace(/\\/g,'//');
+            deleteIds +=  ","+list[i].url.replace(/\\/g,'//');
+          }
+          if (deleteNames.substr(0,1)===',') {
+            deleteNames=deleteNames.substr(1);
+          }
+          if (deleteIds.substr(0,1)===',') {
+            deleteIds=deleteNames.substr(1);
           }
           this.$confirm(  `请确认选中文件夹[${ deleteNames }]`, {
             type: 'warning'

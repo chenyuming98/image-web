@@ -61,7 +61,7 @@
         </el-card>
       </el-col>
 
-      <el-col :offset="2" :xs="8" :sm="14" :md="16" :lg="18" :xl="18">
+      <el-col :offset="2" :xs="19" :sm="19" :md="19" :lg="19" :xl="19">
         <el-card class="box-card">
           <!--表头菜单-->
           <div class="tableHeaderToolButtonGroup">
@@ -114,12 +114,81 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-dialog :title="chooseTitleParamDialog"   :visible.sync="chooseParamDialog"
+               :before-close="paramCancel" :close-on-click-modal="false" :width="'50%'">
+
+      <!-- :model绑定表单对象  status-icon控制每一行表单校验通过后图标显示正确和错误   :rules绑定校验规则  autocomplete="off" 关闭表单默认以及功能-->
+      <el-form :model="paramFormBase" status-icon   ref="svmRefForm"  size="mini" :inline="true" class="demo-form-inline">
+        <el-divider content-position="left" class="lab-class">SVM配置</el-divider>
+        <el-form-item label="类型" prop="svmType" >
+          <el-select v-model="paramFormBase.svmType" placeholder="类型" style="width: 150px">
+            <el-option
+              v-for="item in svmTypeList"
+              :key="item.dictionaryId"
+              :label="item.dictionaryName"
+              :value="item.dictionaryValue">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="内核" prop="svmKernel" >
+          <el-select v-model="paramFormBase.svmKernel" placeholder="内核" style="width: 150px">
+            <el-option
+              v-for="item in svmKernelList"
+              :key="item.dictionaryId"
+              :label="item.dictionaryName"
+              :value="item.dictionaryValue">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="惩罚因子"  prop="svmC">
+          <el-input v-model="paramFormBase.svmC" placeholder="惩罚因子" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-divider content-position="left" class="lab-class">HOG配置</el-divider>
+        <el-form-item label="图片归一化"  prop="winSizeX">
+          <el-input type="age" v-model="paramFormBase.winSizeX" placeholder="X" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label=""  prop="winSizeY">
+          <el-input v-model="paramFormBase.winSizeY" placeholder="Y" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="每个块大小"  prop="blockSizeX">
+          <el-input v-model="paramFormBase.blockSizeX" placeholder="X" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label=""  prop="blockSizeY">
+          <el-input v-model="paramFormBase.blockSizeY" placeholder="Y" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="块滑动增量"  prop="blockStrideSizeX">
+          <el-input v-model="paramFormBase.blockStrideSizeX" placeholder="X" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label=""  prop="blockStrideSizeY">
+          <el-input v-model="paramFormBase.blockStrideSizeY" placeholder="Y" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="细胞元大小"  prop="cellSizeX">
+          <el-input v-model="paramFormBase.cellSizeX" placeholder="X" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label=""  prop="cellSizeY">
+          <el-input v-model="paramFormBase.cellSizeY" placeholder="Y" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="特征和维数"  prop="countHogNum">
+          <el-input v-model="paramFormBase.countHogNum" placeholder="直方图特征数量" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label=""  prop="dimension">
+          <el-input v-model="paramFormBase.dimension" placeholder="特征维数" autocomplete="off"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="paramCancel">取 消</el-button>
+        <el-button type="primary" @click="trainFile">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </el-container>
 
 </template>
 <!--主页面板-->
 <script>
-  import {fileList,imageFileList,batchRemove,trainSvmFile} from "@/api/base/file"
+  import {fileList,imageFileList,batchRemove,trainSvmFile,paramListm,code} from "@/api/base/file"
   const myToken =  localStorage.getItem('accessToken');
   import {showLoading,hideLoading} from '@/utils/loadingUtils';
   const  multipleSelectionList =  new Set([]);
@@ -128,6 +197,8 @@
       data() {
         return {
           menuVisible: false, //树结构右键 显示框 v-show
+          chooseParamDialog:false,
+          chooseTitleParamDialog:"模型参数",
           token: {'Authorization':  myToken},
           currentNodeData: null,
           useCheck:false,
@@ -152,6 +223,83 @@
           currentNodeData: null,
           currentNodeParentObject: null,
           currentNodeParentData: null,
+          //模型参数表单
+          paramFormBase:{
+            'svmType':  "100",
+            'svmKernel': "0",
+            'svmC': '0.2',
+
+            'winSizeX':64,
+            'winSizeY':128,
+
+            'blockSizeX':16,
+            'blockSizeY':16,
+
+            'blockStrideSizeX':8,
+            'blockStrideSizeY':8,
+
+            'cellSizeX': 8,
+            'cellSizeY': 8,
+
+            'countHogNum': 9,
+            'dimension': 3780,
+            'url':''
+          },
+          // paramRules:{
+          //   svmType: [
+          //     {  required: true, message: '请选择一个类型', trigger: 'change' }
+          //   ],
+          //   svmKernel: [
+          //     {  required: true, message: '请选择一个内核', trigger: 'change' }
+          //   ],
+          //   svmC: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:3, message: '长度在 1 到 3 个字符', trigger: 'blur' }
+          //   ],
+          //   winSizeX: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:3, message: '长度在 1 到 3 个字符', trigger: 'blur' }
+          //   ],
+          //   winSizeY: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:3, message: '长度在 1 到 3 个字符', trigger: 'blur' }
+          //   ],
+          //   blockSizeX: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:3, message: '长度在 1 到 3 个字符', trigger: 'blur' }
+          //   ],
+          //   blockSizeY: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:3, message: '长度在 1 到 3 个字符', trigger: 'blur' }
+          //   ],
+          //   blockStrideSizeX: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:3, message: '长度在 1 到 3 个字符', trigger: 'blur' }
+          //   ],
+          //   blockStrideSizeY: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:3, message: '长度在 1 到 3 个字符', trigger: 'blur' }
+          //   ],
+          //   cellSizeX: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:3, message: '长度在 1 到 3 个字符', trigger: 'blur' }
+          //   ],
+          //   cellSizeY: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:3, message: '长度在 1 到 3 个字符', trigger: 'blur' }
+          //   ],
+          //   countHogNum: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:3, message: '长度在 1 到 3 个字符', trigger: 'blur' }
+          //   ],
+          //   dimension: [
+          //     { required: true, message: '请输入', trigger: 'blur' },
+          //     { min: 1, max:4, message: '长度在 1 到 4 个字符', trigger: 'blur' }
+          //   ],
+          // },
+          svmCList:[],
+          svmKernelList:[],
+          svmTypeList:[],
         }
       },
 
@@ -195,7 +343,6 @@
         *  2.恢复默认只读和禁用状态
         */
         nodeClick(object, value){
-          console.log(this.token)
           this.requestParameters.page=1;
           this.requestParameters.size=10;
           this.currentNodeData = object;
@@ -258,6 +405,7 @@
           }
 
         },
+
 
         /**
          *  处理文件上传前处理
@@ -343,54 +491,91 @@
           }
           else if (command==="trainFile"){
             if (this.useCheck){
-              this.trainFile();
+              this.openChooseParamDialog();
+              // this.trainFile();
             }else {
               this.$message({message: "请先开启复选框！",type:  "error"});
             }
           }
         },
 
+        openChooseParamDialog(){
+          this.doQueryParam();
+          this.chooseParamDialog = true;
+
+        },
+
+
+        /*
+        * 查询配置信息
+        */
+        doQueryParam() {
+          let searchType = { "code":"svmType"};
+          let searchKernel = { "code":"svmKernel"};
+          code(searchType)
+            .then(res => {
+              let resp = res.data;
+              this.svmTypeList = resp.data;
+            })
+          code(searchKernel)
+            .then(res => {
+              let resp = res.data;
+              this.svmKernelList = resp.data;
+            })
+        },
+
+
+        paramCancel(){
+          this.chooseParamDialog = false;
+          this.$refs['svmRefForm'].resetFields();
+        },
+
+
         /**
          * 训练SVM模型
          */
         trainFile(rowData){
-          let list = this.$refs.treeObject.getCheckedNodes();
-          if (list.length===0){
-            this.$message.warning("请勾选操作对象！");
-            return false;
-          }
-          let deleteNames,deleteIds;
-          let submitData = new FormData();
-          for (let i = 0; i < list.length; i++) {
-            if (list[i].url=="train" ||list[i].url=="match" ){
-              continue
-            }
-            if (i===0){
-              deleteNames = list[i].url.replace(/\\/g,'//');
-              deleteIds = list[i].url.replace(/\\/g,'//');
-            }else {
-              deleteNames += ","+list[i].url.replace(/\\/g,'//');
-              deleteIds +=  ","+list[i].url.replace(/\\/g,'//');
-            }
-          }
-          this.$confirm(  `请确认选中文件夹[${ deleteNames }]`, {
-            type: 'warning'
-          }  ).then(() => {
-            submitData.append("url",deleteIds);
-            showLoading();
-            trainSvmFile(submitData)
-              .then(res => {
-                let resp = res.data;
-                if (resp.code === 200) {
-                  hideLoading();
-                  this.$message.success('训练成功!');
-                  // this.doQuery();
-                } else {
-                  this.$message.error(resp.msg);
-                  hideLoading();
+
+              let list = this.$refs.treeObject.getCheckedNodes();
+              if (list.length===0){
+                this.$message.warning("请勾选操作对象！");
+                return false;
+              }
+              this.chooseParamDialog = false;
+              let deleteNames='',deleteIds='';
+              for (let i = 0; i < list.length; i++) {
+                if (list[i].url=="train" ||list[i].url=="match" ){
+                  continue
                 }
+                deleteNames += ","+list[i].url.replace(/\\/g,'//');
+                deleteIds +=  ","+list[i].url.replace(/\\/g,'//');
+              }
+              if (deleteNames.substr(0,1)===',') {
+                deleteNames=deleteNames.substr(1);
+              }
+              if (deleteIds.substr(0,1)===',') {
+                deleteIds=deleteNames.substr(1);
+              }
+               this.$confirm(  `请确认选中文件夹[${ deleteNames }]`, {
+                type: 'warning'
+              }  ).then(() => {
+                // submitData.append("url",deleteIds);
+                let  submitData = this.paramFormBase;
+                submitData.url = deleteIds;
+                showLoading();
+                trainSvmFile(submitData)
+                  .then(res => {
+                    let resp = res.data;
+                    if (resp.code === 200) {
+                      hideLoading();
+                      this.$message.success('训练成功!');
+                      // this.doQuery();
+                    } else {
+                      this.$message.error(resp.msg);
+                      hideLoading();
+                    }
+                  })
               })
-          })
 
         },
 
@@ -506,10 +691,10 @@
 
 <style scoped>
   .el-input{
-    width: 300px;
+    width: 150px;
   }
   .el-select{
-    width: 300px;
+    width: 150px;
   }
   .el-dropdown{
   }
@@ -543,4 +728,7 @@
     display: inline-block;
   }
 
+  .lab-class{
+    margin-bottom: 30px;
+  }
 </style>

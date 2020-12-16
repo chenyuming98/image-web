@@ -19,22 +19,21 @@
           :formatter="formatterRoles"
           >
         </el-table-column>
-        <el-table-column
-          prop="userStatus"
-          label="状态">
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.userStatus"
-              active-color="#13ce66"
-              :active-value= 0
-              :inactive-value=  1
-              @change="handleStatus(scope.row)">
-            </el-switch>
-          </template>
-        </el-table-column>
+<!--        <el-table-column-->
+<!--          prop="userStatus"-->
+<!--          label="状态">-->
+<!--          <template slot-scope="scope">-->
+<!--            <el-switch-->
+<!--              v-model="scope.row.userStatus"-->
+<!--              active-color="#13ce66"-->
+<!--              :active-value= 0-->
+<!--              :inactive-value=  1-->
+<!--              @change="handleStatus(scope.row)">-->
+<!--            </el-switch>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
         <el-table-column  fixed="right"  label="操作" >
           <template slot-scope="scope">
-            <el-button @click="handleRowEdit(scope.row)"   type="text" size="small">+分配员工</el-button>
             <el-button @click="handleRowEdit(scope.row)"   type="text" size="small">编辑</el-button>
             <el-button @click="handleRowDelete(scope.row)" type="text" size="small">删除</el-button>
           </template>

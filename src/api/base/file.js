@@ -8,3 +8,7 @@ export const svmList = data => createAPI('/image/svmList', 'get', data);
 export const testSvmFile = data => createAPI(`/image/svmTest`, 'post', data);
 export const probabilityList = data => createAPI('/image/probabilityList', 'get', data);
 export const deletesProbability = data => createAPI(`/image/deletesProbability`, 'post', data);
+export const paramList = data => createAPI('/image/paramList', 'get', data);
+export const code = data => createAPI('/system/dictionary/findCodeList', 'get', data);
+export const svmInfoList = data => createAPI('/image/svmInfoList', 'get', data);
+export const deletesSvmDatList = data => createAPI(`/image/deletesSvmList`, 'post', data);

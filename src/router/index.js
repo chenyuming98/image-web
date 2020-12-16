@@ -12,6 +12,7 @@ import employeePage from '../components/module-company/employee/index.vue'
 import sysLogPage from '../components/module-system/syslog/index.vue'
 import imageClassPage from '../components/model-imageclass/index.vue'
 import filePage from '../components/model-file/index.vue'
+import svmPage from '../components/model-svm/index.vue'
 Vue.use(VueRouter);
 
 const routes = [
@@ -30,6 +31,7 @@ const routes = [
       { path: '/employee',component: employeePage},
       { path: '/filepage',component: filePage},
       { path: '/imageclasspage',component: imageClassPage},
+      { path: '/svmpage',component: svmPage},
     ]},
 ];
 
