@@ -37,7 +37,9 @@
       <el-header style="text-align: right; font-size: 12px;" height="60px">
         <el-button  style="float: left;margin-top: 10px;"  icon="fa fa-outdent"  @click="toggleCollapse"  ></el-button>
         <div class="app-breadcrumb">
-<!--          服刑人员补贴管理系统-->
+          <p  style="font-size:20px;font-family:'Microsoft YaHei';margin-top: 0px;margin-bottom: 0px;">
+            图片分类管理系统
+          </p>
         </div>
         <span> 你好！ {{this.username}}</span>
         <el-dropdown>
@@ -51,19 +53,6 @@
       <!--右侧主要内容区域-->
       <el-main >
         <router-view/>
-<!--        <div>-->
-<!--          <el-tabs v-model="editableTabsValue"  closable @tab-remove="removeTab">-->
-<!--            <el-tab-pane-->
-<!--              v-for="(item, index) in editableTabs"-->
-<!--              :key="item.name"-->
-<!--              :label="item.title"-->
-<!--              :name="item.name" >-->
-<!--       -->
-<!--            </el-tab-pane>-->
-<!--          </el-tabs>-->
-
-<!--        </div>-->
-
       </el-main>
 
     </el-container>

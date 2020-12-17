@@ -5,7 +5,7 @@ import {showLoading,hideLoading} from '@/utils/loadingUtils';
 
 // create an axios instance
 const instance = axios.create({
-  baseURL:  'http://www.tianyu.com', // api的base_url
+  baseURL:  'http://www.image.com', // api的base_url
   timeout: 15000 // request timeout
 });
 
@@ -57,7 +57,7 @@ export const exportFileRequest = (url, params) => {
   let token = window.localStorage.getItem('accessToken');
   return axios({
     method: 'get',
-    url: `http://www.tianyu.com${url}`,
+    url: `http://www.image.com${url}`,
     params: params,
     responseType: 'blob',
     headers: {

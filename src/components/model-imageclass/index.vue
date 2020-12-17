@@ -15,7 +15,7 @@
               class="upload-demo inline-block margin-right-10"
               ref="upload"
               accept=".jpg"
-              action="http://www.tianyu.com/image/uploadImages"
+              action="http://www.image.com/image/uploadImages"
               :limit="10"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
@@ -126,7 +126,6 @@
   import {showLoading,hideLoading} from '@/utils/loadingUtils';
   import $ from 'jquery'
   const myToken =  localStorage.getItem('accessToken');
-
     export default {
 
       data() {
@@ -177,6 +176,7 @@
          *  处理文件上传前处理
          */
         beforeAvatarUpload(res, file){
+          console.log(this.token)
           this.uploadData.svmId =this.svmFormBase.svmVersionId.svmId;
           console.log(this.uploadData.svmId );
           if (this.uploadData.svmId==null ||this.uploadData.svmId.length<=0){

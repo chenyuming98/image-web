@@ -30,7 +30,7 @@ Vue.use(ElementUI);
 Vue.use(iconPicker);
 Vue.prototype.$http = axios;
 //配置请求的根路径
-axios.defaults.baseURL = 'http://www.tianyu.com/';
+axios.defaults.baseURL = 'http://www.image.com/';
 
 /* eslint-disable no-new */
 new Vue({

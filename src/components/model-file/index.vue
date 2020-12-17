@@ -8,7 +8,7 @@
               class="upload-demo inline-block margin-right-10"
               ref="upload"
               accept=".zip"
-              action="http://www.tianyu.com/image/uploadZip"
+              action="http://www.image.com/image/uploadZip"
               :limit="1"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"

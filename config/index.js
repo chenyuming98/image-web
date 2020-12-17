@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       // '/api': {
-      //   target: 'http://www.tianyu.com/',
+      //   target: 'http://www.image.com/',
       //   changeOrigin: true,
       //   pathRewrite: {
       //     '^/api': ''
@@ -21,7 +21,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'www.tianyu.com', // can be overwritten by process.env.HOST
+    host: 'www.image.com', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
