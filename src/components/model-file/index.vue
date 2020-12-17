@@ -1,7 +1,7 @@
 <template>
   <el-container style="border: 1px solid #eee">
     <el-row style="width: 100%">
-      <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3" class="aside">
+      <el-col :xs="3" :sm="3" :md="3" :lg="7" :xl="5" class="aside">
         <el-card class="box-card" style="   width: 300px;  height: 552px;">
           <el-row style=" padding-bottom: 7px;">
             <el-upload
@@ -61,7 +61,7 @@
         </el-card>
       </el-col>
 
-      <el-col :offset="2" :xs="19" :sm="19" :md="19" :lg="19" :xl="19">
+      <el-col   :xs="19" :sm="19" :md="19" :lg="17" :xl="19">
         <el-card class="box-card">
           <!--表头菜单-->
           <div class="tableHeaderToolButtonGroup">
