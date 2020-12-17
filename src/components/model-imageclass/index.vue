@@ -8,8 +8,9 @@
         <el-card class="box-card">
           <!--表头菜单-->
           <div id="handButton" >
-            <el-button type="primary" icon="fa fa-folder-open" size="small" @click="openSvmDialog('more')"> 测试集测试</el-button>
-            <el-button type="primary" icon="fa fa-image" size="small" @click="openSvmDialog('one')"> 上传图片</el-button>
+            <el-button icon="el-icon-delete" size="mini"  @click="batchDelete" ></el-button>
+            <el-button type="primary" icon="fa fa-image" size="mini" @click="openSvmDialog('one')"> 上传图片</el-button>
+            <el-button type="primary" icon="fa fa-folder-open" size="mini" @click="openSvmDialog('more')"> 测试集测试</el-button>
             <el-upload
               class="upload-demo inline-block margin-right-10"
               ref="upload"
@@ -26,7 +27,7 @@
             </el-upload>
           </div>
           <el-row style="padding-top: 10px;">
-            <el-button icon="el-icon-delete" size="mini"  @click="batchDelete" ></el-button>
+
           </el-row>
         </el-card>
 

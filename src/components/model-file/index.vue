@@ -16,7 +16,7 @@
               :data = uploadData
               :show-file-list = false
               :auto-upload="true">
-              <el-button type="primary" icon="el-icon-download" size="small" @click="">导入</el-button>
+              <el-button type="primary" icon="el-icon-download" size="small" @click="">导入图片集</el-button>
            </el-upload>
             <el-dropdown @command="handleCommand" style="  margin-left: 10px;   border-left-width: 1px; ">
               <el-button   size="small">

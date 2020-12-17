@@ -7,8 +7,6 @@ import userPage from '../components/module-system/user/index.vue'
 import rolePage from '../components/module-system/role/index.vue'
 import permPage from '../components/module-system/permission/index.vue'
 import dictionaryPage from '../components/module-system/dictionary/index.vue'
-import companyPage from '../components/module-company/company/index.vue'
-import employeePage from '../components/module-company/employee/index.vue'
 import sysLogPage from '../components/module-system/syslog/index.vue'
 import imageClassPage from '../components/model-imageclass/index.vue'
 import filePage from '../components/model-file/index.vue'
@@ -25,10 +23,8 @@ const routes = [
       { path: '/userpage',component: userPage},
       { path: '/rolepage',component: rolePage},
       { path: '/permpage',component: permPage},
-      { path: '/companypage',component: companyPage},
-      { path: '/dictionarypage',component: dictionaryPage},
       { path: '/syslogpage',component: sysLogPage},
-      { path: '/employee',component: employeePage},
+      { path: '/dictionarypage',component: dictionaryPage},
       { path: '/filepage',component: filePage},
       { path: '/imageclasspage',component: imageClassPage},
       { path: '/svmpage',component: svmPage},
