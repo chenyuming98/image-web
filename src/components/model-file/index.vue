@@ -543,6 +543,7 @@
               }
               this.chooseParamDialog = false;
               let deleteNames='',deleteIds='';
+              debugger
               for (let i = 0; i < list.length; i++) {
                 if (list[i].url=="train" ||list[i].url=="match" ){
                   continue
@@ -554,14 +555,14 @@
                 deleteNames=deleteNames.substr(1);
               }
               if (deleteIds.substr(0,1)===',') {
-                deleteIds=deleteNames.substr(1);
+                deleteIds=deleteNames.substr(0);
               }
                this.$confirm(  `请确认选中文件夹[${ deleteNames }]`, {
                 type: 'warning'
               }  ).then(() => {
                 // submitData.append("url",deleteIds);
                 let  submitData = this.paramFormBase;
-                submitData.url = deleteIds;
+                submitData.url = deleteNames;
                 showLoading();
                 trainSvmFile(submitData)
                   .then(res => {

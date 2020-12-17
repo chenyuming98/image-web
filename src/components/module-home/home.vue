@@ -9,20 +9,20 @@
         <el-col :span="6">
           <el-card shadow="always">
             <p style="font-size:13px;font-family:'Microsoft YaHei';color: #999999">
-              今日访问人数
+              今日新增训练图片数
             </p>
             <p style="font-size:28px;font-family:'Microsoft YaHei'">
-              <i class="el-icon-thumb"></i> 1,800
+              <i class="el-icon-thumb"></i> {{nowLabel.todayAddTotal}}
             </p>
             <p style="font-size:13px;font-family:'Microsoft YaHei'">
               周同比30%  <i class="el-icon-arrow-up"></i> 日同比56% <i class="el-icon-arrow-down"></i>
             </p>
             <el-divider></el-divider>
             <p style="font-size:13px;font-family:'Microsoft YaHei';float:left;">
-              总访问人数
+              总训练图片数
             </p>
             <p style="font-size:13px;font-family:'Microsoft YaHei';float:left;">
-              <i class="el-icon-thumb"></i> 2,795,852
+              <i class="el-icon-thumb"></i> {{nowLabel.trainTotal}}
             </p>
           </el-card>
         </el-col>
@@ -31,7 +31,7 @@
         <el-col :span="6">
           <el-card shadow="always">
             <p style="font-size:13px;font-family:'Microsoft YaHei';color: #999999">
-              今日注册数
+              今日接口访问
             </p>
             <p style="font-size:28px;font-family:'Microsoft YaHei'">
               <i class="el-icon-s-check"></i> 80
@@ -41,7 +41,7 @@
             </p>
             <el-divider></el-divider>
             <p style="font-size:13px;font-family:'Microsoft YaHei';float:left;">
-              总用户数
+              总访问数
             </p>
             <p style="font-size:13px;font-family:'Microsoft YaHei';float:left;">
               <i class="el-icon-s-check"></i> 452,625
@@ -115,20 +115,23 @@
 
 <script>
   import echarts from 'echarts'
+  import {labelInfo,getStaticInfo } from "@/api/base/index";
+  var trainTotal = 0,todayAddTotal = 0;
     export default {
         name: "home",
         data() {
           return {
             value: new Date(),
             charts: '',
-          }
-        },
-        methods:{
-          drawPie(id){
-            this.charts = echarts.init(document.getElementById(id))
-            this.charts.setOption({
+            nowLabel:{
+              'trainTotal': 0,
+              'todayAddTotal': 0,
+               'xdata':[],
+               'ydata':[],
+            },
+            option: {
               title: {
-                text: '最近一周访问人数',
+                text: '最近一周访问次数',
               },
               color: ['#3398DB'],
               tooltip: {
@@ -146,7 +149,7 @@
               xAxis: [
                 {
                   type: 'category',
-                  data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                  data: [],
                   axisTick: {
                     alignWithLabel: true
                   }
@@ -159,22 +162,58 @@
               ],
               series: [
                 {
-                  name: '人数',
+                  name: '次数',
                   type: 'bar',
                   barWidth: '60%',
-                  data: [95, 52, 200, 334, 59, 330, 220]
+                  data: []
                 }
               ]
-            })
+            },
           }
+        },
+        methods: {
+          drawPie(id) {
+            this.charts = echarts.init(document.getElementById(id));
+            this.charts.setOption(this.option)
+          },
+
+          doQueryLabelInfo() {
+          labelInfo()
+            .then(res => {
+              let resp = res.data;
+              if (resp.data) {
+                this.nowLabel.trainTotal = resp.data['trainTotal'];
+                this.nowLabel.todayAddTotal = resp.data['todayAddTotal'];
+                this.option.xAxis[0].data= resp.data['statisticsVisitMap']['day'];
+                this.option.series[0].data = resp.data['statisticsVisitMap']['data'];
+                this.drawPie('main');
+              }
+            });
+
+          },
+
+          doQueryStaticInfo() {
+            getStaticInfo()
+              .then(res => {
+                let resp = res.data;
+                if (resp.data) {
+                  this.option.xAxis[0].data= resp.data['statisticsVisitMap']['day'];
+                  this.option.series[0].data = resp.data['statisticsVisitMap']['data'];
+                  this.drawPie('main');
+                }
+              });
+            },
+
         },
         //调用
         mounted(){
-          this.$nextTick(function() {
-            this.drawPie('main')
-          })
-        }
-
+        },
+      // 创建完毕状态
+      created: function () {
+        this.username = window.localStorage.getItem("username");
+        this.doQueryLabelInfo();
+        this.doQueryStaticInfo();
+      },
     }
 </script>
 

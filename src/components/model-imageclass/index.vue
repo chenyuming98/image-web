@@ -9,19 +9,20 @@
           <!--表头菜单-->
           <div id="handButton" >
             <el-button type="primary" icon="fa fa-folder-open" size="small" @click="openSvmDialog('more')"> 测试集测试</el-button>
-            <el-button type="primary" icon="fa fa-image" size="small" @click="openSvmDialog('one')"> 上传一张图片</el-button>
+            <el-button type="primary" icon="fa fa-image" size="small" @click="openSvmDialog('one')"> 上传图片</el-button>
             <el-upload
               class="upload-demo inline-block margin-right-10"
               ref="upload"
-              accept=".zip"
-              action="http://www.tianyu.com/image/match/uploadImage"
-              :limit="1"
-
+              accept=".jpg"
+              action="http://www.tianyu.com/image/uploadImages"
+              :limit="10"
+              :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
               :headers="token"
               :data = uploadData
+              :show-file-list = false
               :auto-upload="true">
-              <el-button id="uploadOneImage" type="primary" icon="fa fa-image" size="small" @click="" v-show="false">  上传一张图片</el-button>
+              <el-button id="uploadOneImage" type="primary" icon="fa fa-image" size="small" @click="" v-show="false">  上传图片</el-button>
             </el-upload>
           </div>
           <el-row style="padding-top: 10px;">
@@ -30,7 +31,7 @@
         </el-card>
 
         <el-card class="tableCard" >
-          <el-table :data="dataList"  style="width: 100%" border  ref="multipleTable" >
+          <el-table :data="dataList"  style="width: 100%" border  ref="multipleTable"  >
             <el-table-column type="selection" width="40" prop="imageId"> </el-table-column>
             <el-table-column  prop="fileName"  label="文件名" > </el-table-column>
             <el-table-column prop="image" label="图片" min-width="100px" >
@@ -47,6 +48,7 @@
             </el-table-column>
             <el-table-column  prop="label"  label="标签"   :formatter="labelFormatter"></el-table-column>
             <el-table-column  prop="svmInfo"  label="标签信息" > </el-table-column>
+            <el-table-column  prop="createTime"  label="时间" > </el-table-column>
             <el-table-column  prop="probability"  label="概率" > </el-table-column>
             <el-table-column  prop="classification"  label="分类预测" > </el-table-column>
           </el-table>
@@ -134,7 +136,7 @@
           smvData: [],
           dataList: [],
           formBase: {},
-          uploadData:'',
+          uploadData:{ svmId:""},
           FileFormBase:{},
           svmFormBase:{
             svmVersionId:"",
@@ -161,17 +163,25 @@
           total: 0,
           requestParameters: {
             page: 1,
-            size: 10,
+            size: 30,
           },
 
         }
       },
 
       methods: {
+
+
         /**
          *  处理文件上传前处理
          */
         beforeAvatarUpload(res, file){
+          this.uploadData.svmId =this.svmFormBase.svmVersionId.svmId;
+          console.log(this.uploadData.svmId );
+          if (this.uploadData.svmId==null ||this.uploadData.svmId.length<=0){
+            this.$message.error("SVM文件ID错误！");
+            return false
+          }
         },
 
         openSvmDialog(msg){
@@ -250,6 +260,9 @@
           this.svmFormBase.svmInfo = data.info;
         },
 
+        /*
+        * 测试集测试
+        */
         submitTestData(){
           let list = this.$refs.treeObject.getCheckedNodes();
           if (list.length===0){
@@ -278,7 +291,7 @@
             type: 'warning'
           }  ).then(() => {
             let submitInfo = {
-              svmVersionId: this.svmFormBase.svmVersionId,
+              svmPojo: this.svmFormBase.svmVersionId,
               fileUrl:deleteNames
             };
             showLoading();
@@ -331,7 +344,7 @@
                 let resp = res.data;
                 if (resp.code === 200) {
                   this.$message.success('删除成功!');
-                  this.doQueryProbabilityList();
+                  this.doQueryProbabilityList(this.requestParameters);
                   hideLoading();
                 } else {
                   hideLoading();
@@ -340,6 +353,20 @@
               })
           }).catch(() => {
           });
+
+        },
+
+        /**
+         *  处理文件上传 接口消息回调
+         */
+        handleAvatarSuccess(res, file){
+          let code = res['code'];
+          if (code===200){
+            this.$message.success('上传成功!');
+            this.doQueryProbabilityList(this.requestParameters);
+          }else {
+            this.$message.error(res['msg']);
+          }
 
         },
 
