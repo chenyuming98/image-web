@@ -13,3 +13,4 @@ export const code = data => createAPI('/system/dictionary/findCodeList', 'get', 
 export const svmInfoList = data => createAPI('/image/svmInfoList', 'get', data);
 export const deletesSvmDatList = data => createAPI(`/image/deletesSvmList`, 'post', data);
 
+export const uploadImages = data => createAPI(`/image/uploadImages`, 'post', data);

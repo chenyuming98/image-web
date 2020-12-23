@@ -39,8 +39,8 @@
         rememberpwd: false,
         ruleForm: {
           //username和password默认为空
-          username: 'chenyuming',
-          userPassword: 'qq12315',
+          username: 'admin',
+          userPassword: 'admin',
           code: '',
         },
         //rules前端验证

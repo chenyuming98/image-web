@@ -6,24 +6,15 @@
 
       <el-col   :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <el-card class="box-card">
-          <!--表头菜单-->
+          <!--表头菜单   -->
           <div id="handButton" >
             <el-button icon="el-icon-delete" size="mini"  @click="batchDelete" ></el-button>
             <el-button type="primary" icon="fa fa-image" size="mini" @click="openSvmDialog('one')"> 上传图片</el-button>
             <el-button type="primary" icon="fa fa-folder-open" size="mini" @click="openSvmDialog('more')"> 测试集测试</el-button>
             <el-upload
               class="upload-demo inline-block margin-right-10"
-              ref="upload"
-              accept=".jpg"
-              action="http://www.image.com/image/uploadImages"
-              :limit="10"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-              :headers="token"
-              :data = uploadData
-              :show-file-list = false
-              :auto-upload="true">
-              <el-button id="uploadOneImage" type="primary" icon="fa fa-image" size="small" @click="" v-show="false">  上传图片</el-button>
+              action="string" :http-request="beforeAvatarUpload" :limit="10" :show-file-list="false">
+              <el-button id="uploadOneImage" type="primary" icon="fa fa-image" size="small" @click="" v-show="false">  上传图片隐藏</el-button>
             </el-upload>
           </div>
           <el-row style="padding-top: 10px;">
@@ -86,7 +77,7 @@
           </el-select>
 
           <el-form-item label="svm信息" prop="svmInfo" >
-            <el-input  type="textarea" readonly="true" v-model="svmFormBase.svmInfo" autocomplete="off"   :rows="5" ></el-input>
+            <el-input  type="textarea" :readonly=true v-model="svmFormBase.svmInfo" autocomplete="off"   :rows="5" ></el-input>
           </el-form-item>
         </el-form-item>
       </el-form>
@@ -122,7 +113,7 @@
 </template>
 <!--主页面板-->
 <script>
-  import {fileList,testSvmFile,probabilityList,svmList,deletesProbability} from "@/api/base/file"
+  import {fileList,testSvmFile,probabilityList,svmList,deletesProbability,uploadImages} from "@/api/base/file"
   import {showLoading,hideLoading} from '@/utils/loadingUtils';
   import $ from 'jquery'
   const myToken =  localStorage.getItem('accessToken');
@@ -170,19 +161,30 @@
       },
 
       methods: {
-
-
         /**
          *  处理文件上传前处理
          */
-        beforeAvatarUpload(res, file){
-          console.log(this.token)
-          this.uploadData.svmId =this.svmFormBase.svmVersionId.svmId;
-          console.log(this.uploadData.svmId );
-          if (this.uploadData.svmId==null ||this.uploadData.svmId.length<=0){
+        beforeAvatarUpload( file){
+          let svmId =this.svmFormBase.svmVersionId.svmId;
+          if (svmId ==null ||svmId<=0){
             this.$message.error("SVM文件ID错误！");
             return false
           }
+          let formData = new FormData();
+          formData.append('file', file.file);
+          formData.append('svmId', svmId);
+          uploadImages(formData)
+            .then(response => {
+              let res = response.data;
+              if (res['code']===200){
+                this.$message.success('上传成功!');
+                this.doQueryProbabilityList(this.requestParameters);
+              }else {
+                this.$message.error(res['msg']);
+              }
+            }).catch((err) =>{
+              console.log(err)
+          })
         },
 
         openSvmDialog(msg){
