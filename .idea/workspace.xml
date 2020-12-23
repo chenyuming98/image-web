@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d33c0bad-cbd6-4bb4-a3bc-03baa1272490" name="默认更改列表" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="d33c0bad-cbd6-4bb4-a3bc-03baa1272490" name="默认更改列表" comment="最终版">
       <change afterPath="$PROJECT_DIR$/node_modules/.bin/acorn" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/node_modules/.bin/acorn.cmd" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/node_modules/.bin/ansi-html" afterDir="false" />
@@ -24359,11 +24358,12 @@
       <change afterPath="$PROJECT_DIR$/node_modules/zrender/src/vml/vml.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/node_modules/zrender/src/zrender.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/node_modules/zrender/zrender.all.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/base/file.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/base/file.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Login.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/model-imageclass/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/model-imageclass/index.vue" afterDir="false" />
     </list>
+    <list id="3273f8e9-7565-4a7d-948b-1654590e65bf" name="New changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24394,7 +24394,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/api/base" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettierjs.PrettierConfiguration.Package" value="D:\project\my-image\image-web\node_modules\prettier" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
     <property name="ts.external.directory.path" value="D:\Program Files\JetBrains\WebStorm 2019.3.4\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
@@ -24433,6 +24433,7 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="d33c0bad-cbd6-4bb4-a3bc-03baa1272490" name="默认更改列表" comment="" />
+      <changelist id="3273f8e9-7565-4a7d-948b-1654590e65bf" name="New changelist" comment="" />
       <created>1607403698952</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -24450,7 +24451,7 @@
       <workItem from="1608081543938" duration="28482000" />
       <workItem from="1608179323826" duration="22777000" />
       <workItem from="1608304141885" duration="73000" />
-      <workItem from="1608713030929" duration="3362000" />
+      <workItem from="1608713030929" duration="4426000" />
     </task>
     <task id="LOCAL-00001" summary="iamge">
       <created>1607504998236</created>
@@ -24522,7 +24523,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608215778554</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="最终版">
+      <created>1608716643154</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1608716643154</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -24573,10 +24581,10 @@
       <screen x="0" y="0" width="1920" height="1046" />
     </state>
     <state x="670" y="201" key="#run/0.0.1920.1046@0.0.1920.1046" timestamp="1607502189875" />
-    <state x="355" y="29" width="1089" height="987" key="CommitChangelistDialog2" timestamp="1608716545120">
+    <state x="202" y="24" width="1089" height="987" key="CommitChangelistDialog2" timestamp="1608717571724">
       <screen x="0" y="0" width="1920" height="1046" />
     </state>
-    <state x="355" y="29" width="1089" height="987" key="CommitChangelistDialog2/0.0.1920.1046@0.0.1920.1046" timestamp="1608716545120" />
+    <state x="202" y="24" width="1089" height="987" key="CommitChangelistDialog2/0.0.1920.1046@0.0.1920.1046" timestamp="1608717571724" />
     <state x="92" y="92" width="1736" height="862" maximized="true" key="DiffContextDialog" timestamp="1608198800917">
       <screen x="0" y="0" width="1920" height="1046" />
     </state>
@@ -24609,14 +24617,18 @@
       <screen x="0" y="0" width="1920" height="1046" />
     </state>
     <state width="1877" height="487" key="GridCell.Tab.0.right/0.0.1920.1046@0.0.1920.1046" timestamp="1608716555565" />
-    <state x="461" y="164" key="SettingsEditor" timestamp="1607406193236">
+    <state x="461" y="164" key="SettingsEditor" timestamp="1608717557081">
       <screen x="0" y="0" width="1920" height="1046" />
     </state>
-    <state x="461" y="164" key="SettingsEditor/0.0.1920.1046@0.0.1920.1046" timestamp="1607406193236" />
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1046@0.0.1920.1046" timestamp="1608717557081" />
     <state width="498" height="446" key="SwitcherDM" timestamp="1608088432465">
       <screen x="0" y="0" width="1920" height="1046" />
     </state>
     <state width="498" height="446" key="SwitcherDM/0.0.1920.1046@0.0.1920.1046" timestamp="1608088432465" />
+    <state x="790" y="391" key="VCS.EditChangelistDialog" timestamp="1608717218184">
+      <screen x="0" y="0" width="1920" height="1046" />
+    </state>
+    <state x="790" y="391" key="VCS.EditChangelistDialog/0.0.1920.1046@0.0.1920.1046" timestamp="1608717218184" />
     <state x="552" y="251" key="Vcs.Push.Dialog.v2" timestamp="1608215785727">
       <screen x="0" y="0" width="1920" height="1046" />
     </state>

@@ -42,7 +42,7 @@
             <el-table-column  prop="svmInfo"  label="标签信息" > </el-table-column>
             <el-table-column  prop="createTime"  label="时间" > </el-table-column>
             <el-table-column  prop="probability"  label="概率" > </el-table-column>
-            <el-table-column  prop="classification"  label="分类预测" > </el-table-column>
+            <el-table-column  prop="classification"  label="分类预测" :formatter="formatterClass" > </el-table-column>
           </el-table>
           <!--表格分页-->
           <div class="block">
@@ -261,6 +261,21 @@
 
         getSvmSelectData(data){
           this.svmFormBase.svmInfo = data.info;
+        },
+
+        /**
+         * 表格格式化内容
+         */
+        formatterClass(row, column) {
+          let name  = row['classification'];
+          if (name){
+            let s = name.split("//");
+            if (s){
+              return s[1];
+            }
+            return '';
+          }
+          return '';
         },
 
         /*
