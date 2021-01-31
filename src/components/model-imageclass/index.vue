@@ -38,8 +38,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column  prop="label"  label="标签"   :formatter="labelFormatter"></el-table-column>
             <el-table-column  prop="svmInfo"  label="标签信息" > </el-table-column>
+            <el-table-column  prop="label"  label="文件标签"   :formatter="labelFormatter"></el-table-column>
+            <el-table-column  prop="score"  label="预测得分"   :formatter="scoreFormatter"></el-table-column>
             <el-table-column  prop="createTime"  label="时间" > </el-table-column>
             <el-table-column  prop="probability"  label="概率" > </el-table-column>
             <el-table-column  prop="classification"  label="分类预测" :formatter="formatterClass" > </el-table-column>
@@ -256,7 +257,14 @@
         * 表单格式化取整
         */
         labelFormatter(row, column){
-          return Math.round(row.label);
+          if (row.score){
+            return Math.round(row.label)
+          }
+          return '';
+        },
+
+        scoreFormatter(row, column){
+          return Math.round(row.score);
         },
 
         getSvmSelectData(data){

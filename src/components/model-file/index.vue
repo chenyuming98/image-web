@@ -9,7 +9,7 @@
               ref="upload"
               accept=".zip"
               action="http://www.image.com/image/uploadZip"
-              :limit="1"
+              :limit="10"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
               :headers="token"
