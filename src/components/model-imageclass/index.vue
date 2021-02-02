@@ -73,7 +73,7 @@
               v-for="item in smvData"
               :key="item.svmId"
               :label="item.name"
-              :value="item">
+              :value="item.svmId">
             </el-option>
           </el-select>
 
@@ -257,7 +257,7 @@
         * 表单格式化取整
         */
         labelFormatter(row, column){
-          if (row.score){
+          if (row.label){
             return Math.round(row.label)
           }
           return '';
@@ -268,7 +268,12 @@
         },
 
         getSvmSelectData(data){
-          this.svmFormBase.svmInfo = data.info;
+          for (let i = 0; i<this.smvData.length; i++){
+            let ob = this.smvData[i];
+            if (ob.svmId === data){
+              this.svmFormBase.svmInfo = ob.info;
+            }
+          }
         },
 
         /**

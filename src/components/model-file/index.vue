@@ -541,6 +541,10 @@
                 this.$message.warning("请勾选操作对象！");
                 return false;
               }
+              if (list.length<=1){
+                this.$message.warning("请勾选两个文件夹对象！");
+                return false;
+              }
               this.chooseParamDialog = false;
               let deleteNames='',deleteIds='';
               debugger
