@@ -229,20 +229,20 @@
             'svmKernel': "0",
             'svmC': '0.2',
 
-            'winSizeX':64,
-            'winSizeY':128,
+            'winSizeX':128,
+            'winSizeY':256,
 
-            'blockSizeX':16,
-            'blockSizeY':16,
+            'blockSizeX':32,
+            'blockSizeY':32,
 
-            'blockStrideSizeX':8,
-            'blockStrideSizeY':8,
+            'blockStrideSizeX':16,
+            'blockStrideSizeY':16,
 
-            'cellSizeX': 8,
-            'cellSizeY': 8,
+            'cellSizeX': 16,
+            'cellSizeY': 16,
 
-            'countHogNum': 9,
-            'dimension': 3780,
+            'countHogNum': 18,
+            'dimension': 7560,
             'url':''
           },
           // paramRules:{

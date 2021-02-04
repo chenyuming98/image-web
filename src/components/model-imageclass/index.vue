@@ -53,6 +53,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="requestParameters.page"
+                :page-sizes="[100, 200, 300, 400]"
                 :page-size="requestParameters.size"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">
@@ -155,7 +156,7 @@
           total: 0,
           requestParameters: {
             page: 1,
-            size: 30,
+            size: 100,
           },
 
         }
@@ -166,7 +167,7 @@
          *  处理文件上传前处理
          */
         beforeAvatarUpload( file){
-          let svmId =this.svmFormBase.svmVersionId.svmId;
+          let svmId =this.svmFormBase.svmVersionId;
           if (svmId ==null ||svmId<=0){
             this.$message.error("SVM文件ID错误！");
             return false

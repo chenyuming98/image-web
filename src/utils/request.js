@@ -6,7 +6,7 @@ import {showLoading,hideLoading} from '@/utils/loadingUtils';
 // create an axios instance
 const instance = axios.create({
   baseURL:  'http://www.image.com', // api的base_url
-  timeout: 15000 // request timeout
+  timeout: 60000 // request timeout
 });
 
 // request interceptor
