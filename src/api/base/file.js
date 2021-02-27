@@ -12,5 +12,7 @@ export const paramList = data => createAPI('/image/paramList', 'get', data);
 export const code = data => createAPI('/system/dictionary/findCodeList', 'get', data);
 export const svmInfoList = data => createAPI('/image/svmInfoList', 'get', data);
 export const deletesSvmDatList = data => createAPI(`/image/deletesSvmList`, 'post', data);
-
+showUploadImage
 export const uploadImages = data => createAPI(`/image/uploadImages`, 'post', data);
+export const showUploadImage = data => createAPI(`/image/showUploadImage`, 'post', data);
+export const showUploadUrlImage = data => createFormAPI(`/image/showUploadUrlImage`, 'post', data);

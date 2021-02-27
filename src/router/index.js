@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Index from '../components/Index.vue'
+import Show from '../components/Show.vue'
 import homePage from '../components/module-home/home.vue'
 import userPage from '../components/module-system/user/index.vue'
 import rolePage from '../components/module-system/role/index.vue'
@@ -16,6 +17,7 @@ Vue.use(VueRouter);
 const routes = [
   // { path: '/', redirect:'/login'},
   { path: '/', redirect:'/index'},
+  { path: '/show' , component: Show},
   { path: '/login' , component: Login},
   { path: '/index' , component: Index,redirect:'/homepage'
     ,children:[
@@ -49,6 +51,8 @@ router.beforeEach((to, from, next) => {
     // 如果已经登录的话,去登录页，返回首页
     if (to.path === '/login') {
       next('/index');
+    }else if(to.path === '/show'){
+      next();
     }else{
       // 如果是其他页面的话，直接next()
       next();
@@ -57,7 +61,9 @@ router.beforeEach((to, from, next) => {
     // 如果未登录，跳转登录页
     if (to.path === '/login') { // 如果是登录页面的话，直接next()
       next();
-    } else { // 否则 跳转到登录页面
+    }else if(to.path === '/show'){
+      next();
+    }else { // 否则 跳转到登录页面
       next({
         path: '/login'
       });
