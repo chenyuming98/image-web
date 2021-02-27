@@ -1,171 +1,104 @@
 <template>
   <div class="login-wrap">
-
-
-
-    <el-card class="box-card">
-      <el-tabs v-model="activeName"  >
-        <el-tab-pane label="图片分类" name="first">
-          <el-form :model="requestParameters" :inline="true" status-icon  ref="searchRefForm"
-                   size="small"  >
-
-            <el-input placeholder="请输入图片链接地址" v-model="requestParameters.url">
-              <template slot="prepend">Http://</template>
-              <el-button slot="append" icon="el-icon-search" @click="doSearch"></el-button>
-              <el-button slot="append"  type="primary" icon="el-icon-upload2" size="small" @click="clickUpload" ></el-button>
-
-            </el-input>
-            <el-upload
-                       class="upload-demo inline-block margin-right-10"
-                       action="string" :http-request="beforeAvatarUpload" :limit="10" :show-file-list="false">
-              <el-button id="uploadUrlImage" type="primary" icon="el-icon-upload2" size="small" @click="" v-show="false">上传图片隐藏</el-button>
-            </el-upload>
-
-          </el-form>
-
-        </el-tab-pane>
-        <el-tab-pane label="用户登录" name="second">用户登录</el-tab-pane>
-      </el-tabs>
-
-    </el-card>
-
-
-    <el-dialog
-      title="提示"
-      :visible.sync="dialogVisible"
-      width="30%"
-      :before-close="handleClose">
-
-      <span slot="footer" class="dialog-footer">
-
-    <el-table :data="dataList"  style="width: 100%" border  ref="multipleTable"  >
-
-            <el-table-column prop="image" label="图片" min-width="100px" >
-              <!-- 图片的显示 -->
-              <template   slot-scope="scope">
-                <!--            <img :src="scope.row.url"  min-width="70" height="70" />-->
-                <div class="demo-image__preview">
-                  <el-image
-                    style="width: 100px; height: 75px"
-                    :src="scope.row.url"
-                    :preview-src-list=[scope.row.url]>></el-image>
-                </div>
-              </template>
-            </el-table-column>
-
-
-            <el-table-column  prop="createTime"  label="时间" > </el-table-column>
-
-            <el-table-column  prop="classification"  label="分类预测" :formatter="formatterClass" > </el-table-column>
-        </el-table>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-  </span>
-    </el-dialog>
-
+    <div>  <h1 class="title">图片分类管理系统</h1> </div>
+    <el-form label-position="left" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm login-container">
+      <h3 class="title">用户登录</h3>
+      <el-form-item prop="username">
+        <el-input type="text" v-model="ruleForm.username" auto-complete="off" placeholder="账号"></el-input>
+      </el-form-item>
+      <el-form-item prop="userPassword">
+        <el-input type="password" v-model="ruleForm.userPassword" auto-complete="off" placeholder="密码"></el-input>
+      </el-form-item>
+      <!--      <el-row>-->
+      <!--        <el-col :span="12">-->
+      <!--          <el-form-item prop="code">-->
+      <!--            <el-input type="text" v-model="ruleForm.code" auto-complete="off" placeholder="图形验证码" @keyup.enter.native="submitForm('ruleForm')"></el-input>-->
+      <!--          </el-form-item>-->
+      <!--        </el-col>-->
+      <!--&lt;!&ndash;        <el-col :span="12" class="code-box">&ndash;&gt;-->
+      <!--&lt;!&ndash;          <img :src="ruleForm.codeimg" alt="" class="codeimg" @click="getcode()">&ndash;&gt;-->
+      <!--&lt;!&ndash;        </el-col>&ndash;&gt;-->
+      <!--      </el-row>-->
+      <!--      <el-checkbox class="remember" v-model="rememberpwd">记住密码</el-checkbox>-->
+      <el-form-item style="width:100%;">
+        <el-button type="primary" style="width:100%;margin-top: 30px;" @click="submitForm('ruleForm')" :loading="logining">登录</el-button>
+      </el-form-item>
+    </el-form>
   </div>
-
 </template>
-
 <script>
-  import { showUploadUrlImage,showUploadImage} from "@/api/base/file"
-  import {showLoading,hideLoading} from '@/utils/loadingUtils';
-  import $ from 'jquery'
+  import { login } from '../api/base/users'
+
   export default {
-    name: 'show',
+    name: 'login',
     data() {
       return {
-        dataList:[],
-        activeName: 'first',
-        dialogVisible: false,
-        forecast:{
-          'url': '',
-          'classification': '',
+        //定义loading默认为false
+        logining: false,
+        // 记住密码
+        rememberpwd: false,
+        ruleForm: {
+          //username和password默认为空
+          username: 'admin',
+          userPassword: 'admin',
+          code: '',
         },
-        requestParameters: {
-          url:'',
-        },
+        //rules前端验证
+        rules: {
+          username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+          userPassword: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+          // code: [{ required: false, message: '请输入验证码', trigger: 'blur' }]
+        }
       }
     },
     // 创建完毕状态(里面是操作)
     created() {
+      // 获取图形验证码
+      // this.getcode()
+      // 获取存在本地的用户名密码
+      this.getuserpwd()
 
     },
     // 里面的函数只有调用才会执行
     methods: {
-
-      clickUpload(){
-        $("#uploadUrlImage").click()
+      // 获取用户名密码
+      getuserpwd() {
+        // if (getCookie('user') != '' && getCookie('pwd') != '') {
+        //   this.ruleForm.username = getCookie('user')
+        //   this.ruleForm.userPassword = getCookie('pwd')
+        //   this.rememberpwd = true
+        // }
       },
-      /*
-      * 查询分类搜索
-      */
-      doSearch(params) {
-        this.dataList.length=0;
-        showUploadUrlImage(this.requestParameters)
-          .then(response => {
-            let res = response.data;
-            if (res['code']===200){
-              // this.$message.success('上传成功!');
-              this.dialogVisible=true;
-              this.dataList.push(res['data']);
-              this.forecast.url = res['data']['url'] ;
-              let name  = res['data']['classification'];
-              if (name){
-                let s = name.split("//");
-                if (s){
-                  this.forecast.classification =s[1];
-                }else {
-                  this.forecast.classification = '未识别';
-                }
+      //获取info列表12
+      submitForm(formName) {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            this.logining = true;
+            login(this.ruleForm).then(res => {
+              let resp  = res.data;
+              // this.$message({message:resp.msg,type:resp.code===200?"success":"error"});
+              if(resp.code===200) {
+                this.$message({message:resp.msg,type:resp.code===200?"success":"error"});
+                window.localStorage.setItem("accessToken",resp.data['jwtStrSwagger']);
+                window.localStorage.setItem("username",resp.data['username']);
+                console.log(  "token：" + window.localStorage.getItem("accessToken"));
+                this.$router.push({ path: '/index' })
+              }else {
+                this.$message.error(resp.msg);
+                this.logining = false;
+                return false;
               }
-            }else {
-              this.$message.error(res['msg']);
-            }
-          }).catch((err) =>{
-          console.log(err)
+            })
+          }
+          // else {
+          //   // 获取图形验证码
+          //   this.getcode()
+          //   this.$message.error('请输入用户名密码！')
+          //   this.logining = false
+          //   return false
+          // }
         })
       },
-
-      /**
-       *  处理文件上传前处理
-       */
-      beforeAvatarUpload( file){
-        this.dataList.length=0;
-        let formData = new FormData();
-        formData.append('file', file.file);
-        showUploadImage(formData)
-          .then(response => {
-            let res = response.data;
-            debugger
-            if (res['code']===200){
-              // this.$message.success('上传成功!');
-              this.dialogVisible=true;
-              this.dataList.push(res['data']);
-              this.forecast.url = res['data']['url'] ;
-              let name  = res['data']['classification'];
-              if (name){
-                let s = name.split("//");
-                if (s){
-                  this.forecast.classification =s[1];
-                }else {
-                  this.forecast.classification = '未识别';
-                }
-              }
-            }else {
-              this.$message.error(res['msg']);
-            }
-          }).catch((err) =>{
-          console.log(err)
-        })
-      },
-
-      handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-      }
     }
   }
 </script>
@@ -192,7 +125,6 @@
     text-align: left;
     box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.1);
   }
-
   .title {
     margin: 0px auto 40px auto;
     text-align: center;
@@ -207,21 +139,4 @@
   .codeimg {
     height: 40px;
   }
-
-  /*************************文件上传******************************/
-  .inline-block {
-    display: inline-block;
-  }
-
-  .box-card {
-    width: 480px;
-    height:400px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right:0;
-    bottom: 0;
-    margin: auto;
-  }
-
 </style>

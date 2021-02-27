@@ -42,11 +42,11 @@
               </template></el-table-column>
             <el-table-column  prop="countHogNum"  label="特征数量" > </el-table-column>
             <el-table-column  prop="dimension"  label="维数" > </el-table-column>
-<!--            <el-table-column  fixed="right"  label="操作" >-->
-<!--              <template slot-scope="scope">-->
-<!--                <el-button @click="handleRowDelete(scope.row)" type="text" size="small">删除</el-button>-->
-<!--              </template>-->
-<!--            </el-table-column>-->
+            <el-table-column  fixed="right"  label="操作" >
+              <template slot-scope="scope">
+                <el-button @click="handleIndex(scope.row)" type="text" size="small">设置</el-button>
+              </template>
+            </el-table-column>
           </el-table>
           <!--表格分页-->
           <div class="block">
@@ -66,14 +66,24 @@
         </el-card>
       </el-col>
     </el-row>
+    <!--2. 添加编辑表单  -->
+    <el-dialog :title="formTitle"  :visible.sync="dialogFormVisible" :before-close="cancel" :close-on-click-modal="false" :width="'40%'">
+      <!-- :model绑定表单对象  status-icon控制每一行表单校验通过后图标显示正确和错误   :rules绑定校验规则
+              autocomplete="off" 关闭表单默认以及功能-->
 
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <!--        <el-button @click="resetForm('refForm')">重置</el-button>-->
+      </div>
+    </el-dialog>
 
   </el-container>
 
 </template>
 <!--主页面板-->
 <script>
-  import {svmInfoList,deletesSvmDatList} from "@/api/base/file"
+  import {svmInfoList,deletesSvmDatList,setIndexSvm} from "@/api/base/file"
   const myToken =  localStorage.getItem('accessToken');
   import {showLoading,hideLoading} from '@/utils/loadingUtils';
   const  multipleSelectionList =  new Set([]);
@@ -81,6 +91,7 @@
 
       data() {
         return {
+          formTitle: '',
           token: {'Authorization':  myToken},
           uploadData:{ savePath:""},
           dataList: [],
@@ -153,6 +164,30 @@
           }).catch(() => {
           });
 
+        },
+
+        /**
+         * 表格行-设置主页搜索SVM文件
+         */
+        handleIndex(rowData) {
+          this.$confirm(
+            `本次操作将把[ ${rowData.name} ]设置为网站搜索基础文件！`, {
+              type: 'warning'
+            }
+          ).then(() => {
+            setIndexSvm(rowData)
+              .then(res => {
+                let resp = res.data;
+                if (resp.code === 200) {
+                  this.$message.success('设置成功!');
+                  this.doQuery();
+                } else {
+                  this.$message.success(resp.msg);
+                }
+              })
+          }).catch(() => {
+
+          });
         },
       },
       // 创建完毕状态
