@@ -251,8 +251,18 @@
         let name  = row['classification'];
         if (name){
           let s = name.split("//");
+          debugger
           if (s){
-            return s[1];
+            if(s[1]==="LongHair"){
+              return  '长毛猫';
+            }else if (s[1]==="NoHair"){
+              return'无毛猫';
+            }else if (s[1]==="ShortHair"){
+              return '短毛猫';
+            }else {
+              return s[1];
+            }
+
           }
           return '';
         }
