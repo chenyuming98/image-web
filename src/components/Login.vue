@@ -6,25 +6,39 @@
         <el-tab-pane label="图片分类" name="first">
           <el-form style="margin-top: 10px;" :model="requestParameters" :inline="true" status-icon  ref="searchRefForm"
                    size="small"  >
-
-            <el-input placeholder="请输入图片链接地址" v-model="requestParameters.url">
+            <el-input placeholder="请输入图片链接地址" v-model="requestParameters.url" clearable>
               <template slot="prepend">Http://</template>
-              <el-button slot="append" icon="el-icon-search" @click="doSearch"></el-button>
-              <el-button slot="append"  type="primary" icon="el-icon-upload2" size="small" @click="clickUpload" ></el-button>
-
+<!--              <el-button slot="append"  type="primary" icon="el-icon-upload2" size="small" @click="clickUpload"></el-button>-->
+              <el-button slot="append" icon="" @click="doSearch">识别</el-button>
             </el-input>
+
+
             <el-upload
               class="upload-demo inline-block margin-right-10"
-              action="string" :http-request="beforeAvatarUpload" :limit="10" :show-file-list="false">
+              action="string" :http-request="beforeAvatarUpload"   :show-file-list="false">
               <el-button id="uploadUrlImage" type="primary" icon="el-icon-upload2" size="small" @click="" v-show="false">上传图片隐藏</el-button>
             </el-upload>
-
           </el-form>
-          <el-alert
-            title="功能介绍"
-            type="success"
-            description="支持长毛、短毛、无毛猫咪的分类识别...">
-          </el-alert>
+
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            action="string"
+            :http-request="beforeAvatarUpload"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+
+            :auto-upload="false">
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传识别</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg文件</div>
+          </el-upload>
+
+<!--          <el-alert-->
+<!--            title="功能介绍"-->
+<!--            type="success"-->
+<!--            description="支持长毛、短毛、无毛猫咪的分类识别...">-->
+<!--          </el-alert>-->
         </el-tab-pane>
         <el-tab-pane label="用户登录" name="second">
           <el-form label-position="left" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" >
@@ -132,6 +146,19 @@
     },
     // 里面的函数只有调用才会执行
     methods: {
+      submitUpload() {
+        if (this.$refs.upload.uploadFiles.length==0){
+          this.$message.error('上传图片列表为空，请选择图片');
+          return
+        }
+        this.$refs.upload.submit();
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
       // 获取用户名密码
       getuserpwd() {
         // if (getCookie('user') != '' && getCookie('pwd') != '') {
@@ -206,14 +233,13 @@
       /**
        *  处理文件上传前处理
        */
-      beforeAvatarUpload( file){
+      beforeAvatarUpload(file){
         this.dataList.length=0;
         let formData = new FormData();
         formData.append('file', file.file);
         showUploadImage(formData)
           .then(response => {
             let res = response.data;
-            debugger
             if (res['code']===200){
               // this.$message.success('上传成功!');
               this.dialogVisible=true;
@@ -251,7 +277,6 @@
         let name  = row['classification'];
         if (name){
           let s = name.split("//");
-          debugger
           if (s){
             if(s[1]==="LongHair"){
               return  '长毛猫';
