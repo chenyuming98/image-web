@@ -4,21 +4,21 @@
     <el-card class="demo-ruleForm login-container">
       <el-tabs v-model="activeName"  >
         <el-tab-pane label="图片分类" name="first">
-          <el-form style="margin-top: 10px;" :model="requestParameters" :inline="true" status-icon  ref="searchRefForm"
-                   size="small"  >
-            <el-input placeholder="请输入图片链接地址" v-model="requestParameters.url" clearable>
-              <template slot="prepend">Http://</template>
-<!--              <el-button slot="append"  type="primary" icon="el-icon-upload2" size="small" @click="clickUpload"></el-button>-->
-              <el-button slot="append" icon="" @click="doSearch">识别</el-button>
-            </el-input>
+<!--          <el-form style="margin-top: 10px;" :model="requestParameters" :inline="true" status-icon  ref="searchRefForm"-->
+<!--                   size="small"  >-->
+<!--            <el-input placeholder="请输入图片链接地址" v-model="requestParameters.url" clearable>-->
+<!--              <template slot="prepend">Http://</template>-->
+<!--&lt;!&ndash;              <el-button slot="append"  type="primary" icon="el-icon-upload2" size="small" @click="clickUpload"></el-button>&ndash;&gt;-->
+<!--              <el-button slot="append" icon="" @click="doSearch">识别</el-button>-->
+<!--            </el-input>-->
 
 
-            <el-upload
-              class="upload-demo inline-block margin-right-10"
-              action="string" :http-request="beforeAvatarUpload"   :show-file-list="false">
-              <el-button id="uploadUrlImage" type="primary" icon="el-icon-upload2" size="small" @click="" v-show="false">上传图片隐藏</el-button>
-            </el-upload>
-          </el-form>
+<!--            <el-upload-->
+<!--              class="upload-demo inline-block margin-right-10"-->
+<!--              action="string" :http-request="beforeAvatarUpload"   :show-file-list="false">-->
+<!--              <el-button id="uploadUrlImage" type="primary" icon="el-icon-upload2" size="small" @click="" v-show="false">上传图片隐藏</el-button>-->
+<!--            </el-upload>-->
+<!--          </el-form>-->
 
           <el-upload
             class="upload-demo"
@@ -33,7 +33,11 @@
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传识别</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg文件</div>
           </el-upload>
-
+          <el-upload
+            class="upload-demo inline-block margin-right-10"
+            action="string" :http-request="beforeAvatarUpload"   :show-file-list="false">
+            <el-button id="uploadUrlImage" type="primary" icon="el-icon-upload2" size="small" @click="" v-show="false">上传图片隐藏</el-button>
+          </el-upload>
 <!--          <el-alert-->
 <!--            title="功能介绍"-->
 <!--            type="success"-->
